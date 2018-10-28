@@ -4,6 +4,7 @@
 \pgfplotsset{compat=newest}
 \usepgfplotslibrary{fillbetween}
 \usepackage[eulergreek]{sansmath}
+\usepackage[a4paper, margin=5mm]{geometry}
 
 
 \pgfplotsset{
@@ -17,6 +18,7 @@
 
 \definecolor{takeoff}{RGB}{49, 130, 189}
 \definecolor{landing}{RGB}{106,168,79}
+\definecolor{landing-limit}{RGB}{237,152,31}
 \definecolor{limit}{RGB}{212,0,35}
 
 \begin{document}
@@ -27,7 +29,7 @@
   \begin{axis}[
       title={Weight \& Balance vs Number of Pax},
       height=10cm,
-      width=16cm,
+      width=19cm,
       grid=major,
       nodes near coords,
       xlabel={Center of Gravity $[in]$},
@@ -62,7 +64,7 @@
       (117.56,7284) [16]
       (119.32,7478) [17]
     };
-    \addlegendentry{Take-Off}
+    \addlegendentry{Takeoff}
 
     \addplot+[only marks,
       mark=*,
@@ -93,7 +95,8 @@
 
     \addplot+[mark=none,
       color=limit,
-      point meta=explicit symbolic
+      point meta=explicit symbolic,
+      name path=limit
     ] coordinates {
       (100.46, 3900) []
       (100.46, 4209) []
@@ -103,6 +106,17 @@
       (125.60, 3900) []
     };
     \addlegendentry{Limit}
+
+    \addplot+[mark=none,
+      color=landing-limit,
+      dashed,
+      point meta=explicit symbolic,
+      name path=landing-limit
+    ] coordinates {
+      (109.86, 7125) []
+      (125.60, 7125) []
+    };
+    \addlegendentry{Landing-Limit}
 
     \addplot+[mark=none,
       draw=none,
@@ -117,9 +131,17 @@
       (125.60, 3900) []
       (130.00, 3900) []
     };
-
     \path[name path=top] (100,8000) -- (130,8000);
-    \addplot[red, fill opacity=0.1] fill between[of=top and limit-top];
+    \addplot[color=limit, fill opacity=0.1] fill between[of=top and limit-top];
+
+    \addplot+[mark=none,
+      draw=none,
+      point meta=explicit symbolic,
+      name path=landing-limit-top] coordinates {
+      (111.55, 7500) []
+      (125.60, 7500) []
+    };
+    \addplot[color=landing-limit, fill opacity=0.1] fill between[of=landing-limit-top and landing-limit];
 
     \draw [->,shorten >=2mm, shorten <=2mm] (106.91,4183) -- (110.65,4041);
     \draw [->,shorten >=2mm, shorten <=2mm] (105.12,4377) -- (108.63,4235);
